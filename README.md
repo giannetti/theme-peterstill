@@ -1,8 +1,8 @@
-# Peter Still Theme
+## Peter Still Theme
 
-This Omeka theme is just the same as Center Row, with a few tweaks.
+This Omeka theme is based upon Center Row. The featured media are image manuscripts. 
 
-# Changed Files
+## Changed Files
 - modified $pageTitle, line 2: `items/browse.php`
 - modified $sortLinks, lines 18-22: `items/browse.php`
 - modified $pageTitle, line 2: `collections/browse.php`

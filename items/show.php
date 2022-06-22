@@ -1,38 +1,33 @@
 <?php
-queue_css_file('chocolat');
-queue_js_file('jquery.chocolat.min', 'js');
-queue_js_file('items-show', 'js');
-echo head(array('title' => metadata('item', array('Dublin Core', 'Title')), 'bodyclass' => 'items show'));
+$linkToFileMetadata = get_option('link_to_file_metadata');
 $itemFiles = $item->Files;
-$images = array();
-$nonImages = array();
-foreach ($itemFiles as $itemFile) {
-    $mimeType = $itemFile->mime_type;
-    if (strpos($mimeType, 'image') !== false) {
-        $images[] = $itemFile;
-    } else {
-        $nonImages[] = $itemFile;
-    }
+$visualMedia = array();
+$otherFiles = array();
+$sortedMedia = centerrow_sort_files($itemFiles);
+$visualMedia = (isset($sortedMedia['lightMedia'])) ? $sortedMedia['lightMedia'] : null;
+$otherMedia = (isset($sortedMedia['otherMedia'])) ? $sortedMedia['otherMedia'] : null;
+$hasVisualMedia = (count($visualMedia) > 0);
+if ($hasVisualMedia) {
+    queue_css_file('lightgallery.min', 'all', false, 'vendor/lightgallery/css');
+    queue_js_file('lightgallery.min', 'vendor/lightgallery/js');
+    queue_js_file('lg-thumbnail', 'vendor/lightgallery/js/plugins/thumbnail');
+    queue_js_file('lg-zoom', 'vendor/lightgallery/js/plugins/zoom');
+    queue_js_file('lg-video', 'vendor/lightgallery/js/plugins/video');
+    queue_js_file('lg-rotate', 'vendor/lightgallery/js/plugins/rotate');
+    queue_js_file('lg-hash', 'vendor/lightgallery/js/plugins/hash');
+    queue_js_file('lg-itemfiles-config', 'js');
 }
-$hasImages = (count($images) > 0);
+echo head(array('title' => metadata('item', array('Dublin Core', 'Title')), 'bodyclass' => 'items show'));
 ?>
 
-<h1><?php echo metadata('item', array('Dublin Core', 'Title')); ?></h1>
+<h1><?php echo metadata('item', 'rich_title', array('no_escape' => true)); ?></h1>
 
-<!-- The following returns all of the files associated with an item. -->
-<?php if ($hasImages): ?>
-<div id="itemfiles" style="width: 100%; height: 50vh; background: #E0E0E0; margin:auto;"></div>
-<div id="itemfiles-nav">
-    <?php foreach ($images as $itemFile): ?>
-        <a href="<?php echo $itemFile->getWebPath('original'); ?>" class="chocolat-image">
-            <?php echo file_image('square_thumbnail', array(), $itemFile); ?>
-        </a>
-    <?php endforeach; ?>
-</div>
+<?php if ($hasVisualMedia): ?>
+<?php echo centerrow_output_lightgallery($visualMedia); ?>
 <?php endif; ?>
 
-<?php if ((count($nonImages) > 0) && get_theme_option('other_media') == 0): ?>
-    <?php foreach ($nonImages as $nonImage): ?>
+<?php if ((count($otherFiles) > 0) && get_theme_option('other_media') == 0): ?>
+    <?php foreach ($otherFiles as $nonImage): ?>
         <?php echo file_markup($nonImage); ?>
     <?php endforeach; ?>
 <?php endif; ?>
@@ -66,11 +61,12 @@ $hasImages = (count($images) > 0);
 </div>
 <?php endif;?>
 
-<?php if ((count($nonImages) > 0) && get_theme_option('other_media') == 1): ?>
+<?php if ((count($otherFiles) > 0) && get_theme_option('other_media') == 1): ?>
 <div id="other-media" class="element">
-    <h3>Other Media</h3>
-    <?php foreach ($nonImages as $nonImage): ?>
-    <div class="element-text"><a href="<?php echo file_display_url($nonImage, 'original'); ?>"><?php echo metadata($nonImage, 'display_title'); ?> - <?php echo $nonImage->mime_type; ?></a></div>
+    <h3><?php echo __('Files'); ?></h3>
+    <?php foreach ($otherFiles as $nonImage): ?>
+    <?php $fileLink = ($linkToFileMetadata == '1') ? record_url($nonImage) : $nonImage->getWebPath('original'); ?>
+    <div class="element-text"><a href="<?php echo $fileLink; ?>"><?php echo metadata($nonImage, 'rich_title', array('no_escape' => true)); ?> - <?php echo $nonImage->mime_type; ?></a></div>
     <?php endforeach; ?>
 </div>
 <?php endif; ?>

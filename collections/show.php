@@ -1,5 +1,5 @@
 <?php
-$collectionTitle = metadata('collection', 'display_title');
+$collectionTitle = metadata('collection', 'rich_title', array('no_escape' => true));
 $totalItems = metadata('collection', 'total_items');
 ?>
 
@@ -18,11 +18,11 @@ $totalItems = metadata('collection', 'total_items');
             <div class="item-meta">
             <?php if (metadata('item', 'has files')): ?>
             <div class="item-img">
-                <?php echo link_to_item(item_image('thumbnail')); ?>
+                <?php echo link_to_item(item_image()); ?>
             </div>
             <?php endif; ?>
     
-            <h2><?php echo link_to_item(metadata('item', array('Dublin Core', 'Title')), array('class'=>'permalink')); ?></h2>
+            <h2><?php echo link_to_item(null, array('class'=>'permalink')); ?></h2>
     
             <?php if ($creator = metadata('item', array('Dublin Core', 'Creator'))): ?>
             <span class="creator"><?php echo $creator; ?></span>

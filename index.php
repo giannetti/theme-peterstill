@@ -23,8 +23,8 @@ queue_js_string('
     <?php if (get_theme_option('Display Featured Item') !== '0' && count(get_random_featured_items()) > 0): ?>
     <?php echo random_featured_items(3); ?>
     <?php endif; ?>
-    <?php if (get_theme_option('Display Featured Collection') !== '0' && count(get_random_featured_collection()) > 0): ?>
-    <?php echo random_featured_collection(3); ?>
+    <?php if (get_theme_option('Display Featured Collection') !== '0' && get_random_featured_collection()): ?>
+    <?php echo random_featured_collection(); ?>
     <?php endif; ?>
     <?php if ((get_theme_option('Display Featured Exhibit') !== '0')
             && plugin_is_active('ExhibitBuilder')
@@ -35,7 +35,7 @@ queue_js_string('
 </div><!--end featured-item-->
 
 <?php if (get_theme_option('Homepage Text')): ?>
-<p><?php echo get_theme_option('Homepage Text'); ?></p>
+<div id="homepage-text"><?php echo get_theme_option('Homepage Text'); ?></div>
 <?php endif; ?>
 
 <?php fire_plugin_hook('public_home', array('view' => $this)); ?>

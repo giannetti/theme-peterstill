@@ -1,4 +1,4 @@
-</div><!-- end content -->
+</article><!-- end content -->
 
 <footer role="contentinfo">
 
@@ -23,6 +23,7 @@
 <script type="text/javascript">
     jQuery(document).ready(function(){
         Omeka.skipNav();
+        CenterRow.megaMenu();
     });
 </script>
 
