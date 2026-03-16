@@ -652,6 +652,12 @@ nav ul {
     display: flex;
     justify-content: space-between;
   }
+  .item-pagination.navigation li.next {
+    margin-left: auto;
+  }
+  .item-pagination.navigation a {
+    display: block;
+  }
 
   .secondary-nav {
     text-align: center;

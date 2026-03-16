@@ -245,6 +245,14 @@ nav ul {
     padding-top: ((.5 * $base-line-height) - 1px);
     display: flex;
     justify-content: space-between;
+
+    li.next {
+        margin-left: auto;
+    }
+
+    a {
+        display: block;
+    }
 }
 
 .secondary-nav {
