@@ -424,11 +424,11 @@ textarea {
 
   a {
     color: var(--centerrow-red);
-    text-decoration: underline;
+    text-decoration: none;
   }
   a:hover {
-    -webkit-text-decoration: double underline;
-            text-decoration: double underline;
+    -webkit-text-decoration: underline;
+            text-decoration: underline;
   }
   a:focus {
     outline: 1px solid var(--centerrow-red);
