@@ -2,7 +2,7 @@
 <html lang="<?php echo get_html_lang(); ?>">
 <head>
     <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=yes" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, user-scalable=yes" />
     <?php if ($author = option('author')): ?>
     <meta name="author" content="<?php echo $author; ?>" />
     <?php endif; ?>
@@ -27,7 +27,7 @@
 
     <!-- Stylesheets -->
     <?php
-    queue_css_file(array('style', 'iconfonts'));
+    queue_css_file(array('style', 'public', 'iconfonts'));
     queue_css_url('https://fonts.googleapis.com/css?family=Crimson+Text:400,400italic,700,700italic');
     echo head_css();
     echo $this->partial('common/theme_option_styles.php');
@@ -58,7 +58,7 @@
                 <?php else: ?>
                 <?php echo search_form(array('form_attributes' => array('role' => 'search', 'class' => 'closed'))); ?>
                 <?php endif; ?>
-                <button type="button" class="search-toggle" title="<?php echo __('Toggle search'); ?>"></button>
+                <button type="button" class="search-toggle" aria-expanded="false" aria-controls="advanced-form" title="<?php echo __('Toggle search'); ?>"><span class="search-icon" role="presentation"></span></button>
             </div>
 
 
@@ -70,6 +70,6 @@
 
         </header>
 
-        <article id="content" role="main">
+        <main id="content">
 
             <?php fire_plugin_hook('public_content_top', array('view'=>$this)); ?>

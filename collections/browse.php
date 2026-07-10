@@ -4,28 +4,37 @@ echo head(array('title'=>$pageTitle,'bodyclass' => 'collections browse'));
 ?>
 
 <h1><?php echo $pageTitle; ?> <?php echo __('(%s total)', $total_results); ?></h1>
-<?php echo pagination_links(); ?>
 
-<?php
-$sortLinks[__('Title')] = 'Dublin Core,Title';
-$sortLinks[__('Date Added')] = 'added';
-?>
-<div id="sort-links">
-    <span class="sort-label"><?php echo __('Sort by: '); ?></span><?php echo browse_sort_links($sortLinks); ?>
+<div class="browse-controls">
+    <?php
+    $sortLinks[__('Title')] = 'Dublin Core,Title';
+    $sortLinks[__('Date Added')] = 'added';
+    ?>
+    <div id="sort-links">
+        <span class="sort-label"><?php echo __('Sort by: '); ?></span><?php echo browse_sort_links($sortLinks); ?>
+    </div>
+
+    <?php echo pagination_links(); ?>
 </div>
 
 <div class="records">
 <?php foreach (loop('collections') as $collection): ?>
     <div class="collection hentry">
 
-        <?php if ($collectionImage = record_image('collection')): ?>
-            <?php echo link_to_collection($collectionImage, array('class' => 'image')); ?>
-        <?php endif; ?>
+        <?php
+        $linkContent = '';
+        if ($collectionImage = record_image('collection')) {
+            $collectionImageFile = $collection->getFile();
+            $collectionImageTitle = metadata($collectionImageFile, 'rich_title', array('no_escape' => true));
+            $linkContent .= record_image('collection');
+        }
+        $linkContent .= metadata($collection, 'rich_title', array('no_escape' => true));
+        ?>
 
-        <h2><?php echo link_to_collection(); ?></h2>
+        <h2><?php echo link_to_collection($linkContent); ?></h2>
 
         <?php if (metadata('collection', array('Dublin Core', 'Description'))): ?>
-        <div class="collection-description">
+        <div class="description">
             <?php echo text_to_paragraphs(metadata('collection', array('Dublin Core', 'Description'), array('snippet'=>150))); ?>
         </div>
         <?php endif; ?>
@@ -47,7 +56,9 @@ $sortLinks[__('Date Added')] = 'added';
 <?php endforeach; ?>
 </div>
 
-<?php echo pagination_links(); ?>
+<div class="browse-controls">
+    <?php echo pagination_links(); ?>
+</div>
 
 <?php fire_plugin_hook('public_collections_browse', array('collections'=>$collections, 'view' => $this)); ?>
 
