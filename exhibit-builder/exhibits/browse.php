@@ -18,17 +18,25 @@ echo head(array('title' => $title, 'bodyclass' => 'exhibits browse'));
     )); ?>
 </nav>
 
-<?php echo pagination_links(); ?>
+<div class="browse-controls">
+    <?php echo pagination_links(); ?>
+</div>
 
 <div class="records">
     <?php $exhibitCount = 0; ?>
     <?php foreach (loop('exhibit') as $exhibit): ?>
         <?php $exhibitCount++; ?>
         <div class="exhibit hentry <?php if ($exhibitCount%2==1) echo ' even'; else echo ' odd'; ?>">
-            <?php if ($exhibitImage = record_image($exhibit)): ?>
-                <?php echo exhibit_builder_link_to_exhibit($exhibit, $exhibitImage, array('class' => 'image')); ?>
-            <?php endif; ?>
-            <h2><?php echo link_to_exhibit(); ?></h2>
+            <?php 
+            $linkContent = '';
+            if ($exhibitImage = record_image($exhibit)) {
+                $exhibitImageFile = $exhibit->getFile();
+                $exhibitImageTitle = metadata($exhibitImageFile, 'rich_title', array('no_escape' => true));
+                $linkContent .= record_image($exhibit);
+            }
+            $linkContent .= metadata($exhibit, 'title', array('no_escape' => true));
+            ?>
+            <h2><?php echo link_to_exhibit($linkContent); ?></h2>
             <?php if ($exhibitDescription = metadata('exhibit', 'description', array('no_escape' => true))): ?>
             <div class="description"><?php echo $exhibitDescription; ?></div>
             <?php endif; ?>
@@ -39,7 +47,9 @@ echo head(array('title' => $title, 'bodyclass' => 'exhibits browse'));
     <?php endforeach; ?>
 </div>
 
-<?php echo pagination_links(); ?>
+<div class="browse-controls">
+    <?php echo pagination_links(); ?>
+</div>
 
 <?php else: ?>
 <p><?php echo __('There are no exhibits available yet.'); ?></p>
